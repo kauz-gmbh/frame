@@ -4,10 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Frame</title>
-    <meta name="description" content="Add borders to images. All processing happens locally." />
-    <link rel="stylesheet" href="https://unpkg.com/soot.css@1.0.1/soot.min.css" />
+    <meta
+      name="description"
+      content="Add borders to images. All processing happens locally."
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/soot.css@1.0.1/soot.min.css"
+    />
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="icon" type="image/x-icon" href="icons/favicon.png">
+    <link rel="icon" type="image/x-icon" href="icons/favicon.png" />
     <style></style>
   </head>
   <body>
@@ -23,9 +29,20 @@
     </header>
 
     <main>
-      <section id="drop-zone" role="button" tabindex="0" aria-label="File upload area">
+      <section
+        id="drop-zone"
+        role="button"
+        tabindex="0"
+        aria-label="File upload area"
+      >
         <p id="drop-text">Drag & drop images or click to select</p>
-        <input type="file" id="file-input" accept="image/*,.heic,.HEIC" multiple hidden />
+        <input
+          type="file"
+          id="file-input"
+          accept="image/*,.heic,.HEIC"
+          multiple
+          hidden
+        />
       </section>
 
       <form id="options-area" class="hidden">
@@ -70,7 +87,10 @@
       <section id="preview-area" class="hidden">
         <nav class="nav-controls" aria-label="Image navigation">
           <button id="prev-btn" disabled>Previous</button>
-          <span class="image-counter" role="status"><span id="current-num">1</span> of <span id="total-num">1</span></span>
+          <span class="image-counter" role="status"
+            ><span id="current-num">1</span> of
+            <span id="total-num">1</span></span
+          >
           <button id="next-btn" disabled>Next</button>
         </nav>
 
@@ -85,12 +105,20 @@
           <button id="download-all-btn" class="hidden">Download All</button>
         </menu>
 
-        <aside class="keyboard-hints" role="note"><kbd>Space</kbd> Download · <kbd>Esc</kbd> Clear · <kbd>←→</kbd> Navigate</aside>
+        <aside class="keyboard-hints" role="note">
+          <kbd>Space</kbd> Download · <kbd>Esc</kbd> Clear ·
+          <kbd>←→</kbd> Navigate
+        </aside>
       </section>
     </main>
 
     <footer>
-      <p>Made with <span style="color: var(--color-accent)">♡</span> at <a href="https://brutalist.systems/" target="_blank" rel="noopener">brutalist.systems</a></p>
+      <p>
+        Made with <span style="color: var(--color-accent)">♡</span> at
+        <a href="https://brutalist.systems/" target="_blank" rel="noopener"
+          >brutalist.systems</a
+        >
+      </p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
