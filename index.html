@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frame</title>
+    <meta name="description" content="Add borders to images. All processing happens locally." />
+    <link rel="stylesheet" href="https://unpkg.com/soot.css@1.0.1/soot.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="icons/favicon.ico" type="image/x-icon" />
+    <style></style>
+  </head>
+  <body>
+    <header>
+      <h1>Frame</h1>
+      <p>Add borders and blur to images.</p>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="drop-zone" role="button" tabindex="0" aria-label="File upload area">
+        <p id="drop-text">Drag & drop images or click to select</p>
+        <input type="file" id="file-input" accept="image/*,.heic,.HEIC" multiple hidden />
+      </section>
+
+      <form id="options-area" class="hidden">
+        <fieldset class="form-group">
+          <label for="aspect-ratio">Aspect Ratio</label>
+          <select id="aspect-ratio">
+            <!-- Populated by JavaScript -->
+          </select>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label for="border-slider">Border</label>
+          <div class="slider-row">
+            <input type="range" id="border-slider" />
+            <output
+              ><strong><span id="border-value"></span>px</strong></output
+            >
+          </div>
+          <div class="preset-buttons">
+            <!-- Populated by JavaScript -->
+          </div>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label for="bg-type">Background</label>
+          <select id="bg-type">
+            <!-- Populated by JavaScript -->
+          </select>
+        </fieldset>
+
+        <fieldset class="form-group" id="color-control">
+          <label for="bg-color">Color</label>
+          <input type="color" id="bg-color" />
+        </fieldset>
+
+        <fieldset class="form-group hidden" id="blur-control">
+          <label for="blur-amount">Blur Amount</label>
+          <input type="number" id="blur-amount" />
+        </fieldset>
+      </form>
+
+      <section id="preview-area" class="hidden">
+        <nav class="nav-controls" aria-label="Image navigation">
+          <button id="prev-btn" disabled>Previous</button>
+          <span class="image-counter" role="status"><span id="current-num">1</span> of <span id="total-num">1</span></span>
+          <button id="next-btn" disabled>Next</button>
+        </nav>
+
+        <figure>
+          <canvas id="preview-canvas" class="hidden"></canvas>
+          <figcaption class="image-caption" id="image-caption"></figcaption>
+        </figure>
+
+        <menu class="action-buttons">
+          <button id="download-btn">Download</button>
+          <button id="copy-btn">Copy</button>
+          <button id="download-all-btn" class="hidden">Download All</button>
+        </menu>
+
+        <aside class="keyboard-hints" role="note"><kbd>Space</kbd> Download · <kbd>Esc</kbd> Clear · <kbd>←→</kbd> Navigate</aside>
+      </section>
+    </main>
+
+    <footer>
+      <p>Made with <span style="color: var(--color-accent)">♡</span> at <a href="https://brutalist.systems/" target="_blank" rel="noopener">brutalist.systems</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
