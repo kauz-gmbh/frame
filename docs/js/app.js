@@ -410,20 +410,20 @@ class FrameEditor {
     const x = (this.canvas.width - w) / 2;
     const y = (this.canvas.height - h) / 2;
 
-    if ('filter' in this.ctx) {
-      this.ctx.filter = `blur(${blurPx}px)`;
-      this.ctx.drawImage(img, x, y, w, h);
-      this.ctx.filter = 'none';
-    } else {
-      // Fallback for browsers without filter support
-      const tempCanvas = document.createElement('canvas');
-      const tempScale = 0.1;
-      tempCanvas.width = this.canvas.width * tempScale;
-      tempCanvas.height = this.canvas.height * tempScale;
-      const tempCtx = tempCanvas.getContext('2d');
-      tempCtx.drawImage(img, x * tempScale, y * tempScale, w * tempScale, h * tempScale);
-      this.ctx.drawImage(tempCanvas, 0, 0, this.canvas.width, this.canvas.height);
-    }
+    // Create temp canvas to draw and blur the background
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = this.canvas.width;
+    tempCanvas.height = this.canvas.height;
+    const tempCtx = tempCanvas.getContext('2d');
+
+    // Draw the scaled image
+    tempCtx.drawImage(img, x, y, w, h);
+
+    // Apply StackBlur (works on all browsers including Safari/iOS)
+    StackBlur.canvasRGBA(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, blurPx);
+
+    // Draw the blurred result onto main canvas
+    this.ctx.drawImage(tempCanvas, 0, 0);
   }
 
   downloadCanvasBlob(filename) {
