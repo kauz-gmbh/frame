@@ -263,19 +263,27 @@ class FrameEditor {
 
   loadImage(file) {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = new Image();
-        img.onload = () => resolve({
+      const objectURL = URL.createObjectURL(file);
+      const img = new Image();
+
+      img.onload = () => {
+        // NOTE: At this point, the image is loaded and we can revoke the
+        // original object URL to free up some memory. The image objects
+        // still hold the decoded data after the URL has been revoked.
+        URL.revokeObjectURL(objectURL);
+        resolve({
           img,
           file,
           originalName: file.originalName || file.name
         });
-        img.onerror = reject;
-        img.src = e.target.result;
       };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+
+      img.onerror = () => {
+        URL.revokeObjectURL(objectURL);
+        reject(new Error('Failed to load image'));
+      };
+
+      img.src = objectURL;
     });
   }
 
