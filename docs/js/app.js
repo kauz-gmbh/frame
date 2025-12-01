@@ -275,7 +275,6 @@ class FrameEditor {
         URL.revokeObjectURL(objectURL);
         resolve({
           img,
-          file,
           originalName: file.originalName || file.name
         });
       };
@@ -434,6 +433,10 @@ class FrameEditor {
 
     // Draw the blurred result onto main canvas
     this.ctx.drawImage(tempCanvas, 0, 0);
+
+    // Free temp canvas memory explicitly
+    tempCanvas.width = 0;
+    tempCanvas.height = 0;
   }
 
   downloadCanvasBlob(filename) {
