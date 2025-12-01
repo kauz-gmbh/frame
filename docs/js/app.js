@@ -235,6 +235,8 @@ class FrameEditor {
 
     this.images = await Promise.all(files.map(processFile));
     this.currentIndex = 0;
+    // Clear HEIC cache after images are loaded to free memory
+    this.heicCache.clear();
     this.dropText.classList.remove('processing');
     this.updateUI();
     this.renderPreview();
