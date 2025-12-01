@@ -489,21 +489,24 @@ class FrameEditor {
     if (!this.hasImages()) return;
 
     const originalText = this.downloadAllBtn.textContent;
-    this.downloadAllBtn.textContent = 'Creating ZIP...';
     this.downloadAllBtn.disabled = true;
 
     const zip = new JSZip();
     const originalIndex = this.currentIndex;
 
     for (let i = 0; i < this.images.length; i++) {
+      this.downloadAllBtn.textContent = `Processing ${i + 1}/${this.images.length}`;
       this.navigateTo(i);
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       const blob = await new Promise(resolve => {
         this.canvas.toBlob(resolve, 'image/png');
       });
 
       zip.file(this.getFilename(i), blob);
+
+      // Yield to allow garbage collection between images
+      await new Promise(resolve => setTimeout(resolve, 10));
     }
 
     this.downloadAllBtn.textContent = 'Generating ZIP...';
