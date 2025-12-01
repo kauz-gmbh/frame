@@ -10,30 +10,18 @@ class FrameEditor {
       '9:16': { width: 1080, height: 1920, name: 'vertical', label: '9:16 (0.5625:1) Portrait', category: 'Vertical' },
       '2:3': { width: 1080, height: 1620, name: 'photo-portrait', label: '2:3 Photo - 4x6 Print', category: 'Vertical' }
     },
-    border: {
-      min: 0,
-      max: 200,
-      default: 0,
-      step: 5,
-      presets: [0, 20, 50, 100, 150, 200]
-    },
-    background: {
-      types: { color: 'Color', blur: 'Blur' },
-      defaultType: 'color',
-      defaultColor: '#000000'
-    },
-    blur: {
-      min: 5,
-      max: 200,
-      default: 30,
-      step: 5
-    },
+    border: { min: 0, max: 200, default: 0, step: 5, presets: [0, 20, 50, 100, 150, 200] },
+    background: { types: { color: 'Color', blur: 'Blur' }, defaultType: 'color', defaultColor: '#000000' },
+    blur: { min: 5, max: 200, default: 30, step: 5 },
     maxDimension: 4096
   };
 
+  images = [];
+  currentIndex = 0;
+  heicCache = new Map();
+
   constructor() {
     this.initializeDOM();
-    this.initializeState();
     this.initializeCanvas();
     this.initializeControls();
     this.loadSettings();
@@ -67,12 +55,6 @@ class FrameEditor {
     this.presetButtonsContainer = document.querySelector('.preset-buttons');
   }
 
-  initializeState() {
-    this.images = [];
-    this.currentIndex = 0;
-    this.heicCache = new Map();
-  }
-
   initializeCanvas() {
     this.ctx.imageSmoothingEnabled = true;
     this.ctx.imageSmoothingQuality = 'high';
@@ -87,16 +69,10 @@ class FrameEditor {
 
   setDefaultValues() {
     const { border, background, blur } = FrameEditor.config;
-    this.borderSlider.min = border.min;
-    this.borderSlider.max = border.max;
-    this.borderSlider.value = border.default;
-    this.borderSlider.step = border.step;
+    Object.assign(this.borderSlider, { min: border.min, max: border.max, value: border.default, step: border.step });
+    Object.assign(this.blurAmount, { min: blur.min, max: blur.max, value: blur.default, step: blur.step });
     this.borderValue.textContent = border.default;
     this.bgColor.value = background.defaultColor;
-    this.blurAmount.min = blur.min;
-    this.blurAmount.max = blur.max;
-    this.blurAmount.value = blur.default;
-    this.blurAmount.step = blur.step;
     this.bgTypeSelect.value = background.defaultType;
   }
 
@@ -113,14 +89,12 @@ class FrameEditor {
       value.category ? categories[value.category].push(option) : uncategorized.push(option);
     });
 
-    const html = [
+    this.aspectRatioSelect.innerHTML = [
       ...uncategorized.map(o => buildOption(o.key, o)),
       ...Object.entries(categories)
         .filter(([_, options]) => options.length > 0)
         .map(([category, options]) => buildGroup(category, options))
     ].join('');
-
-    this.aspectRatioSelect.innerHTML = html;
   }
 
   populateBorderPresets() {
@@ -138,7 +112,6 @@ class FrameEditor {
   attachEventListeners() {
     this.optionsArea.addEventListener('submit', e => e.preventDefault());
 
-    // File upload
     this.dropZone.addEventListener('click', () => this.fileInput.click());
     this.dropZone.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -151,7 +124,6 @@ class FrameEditor {
       this.fileInput.value = '';
     });
 
-    // Drag and drop
     this.dropZone.addEventListener('dragover', e => {
       e.preventDefault();
       this.dropZone.classList.add('drag-over');
@@ -163,7 +135,6 @@ class FrameEditor {
       await this.handleFiles(Array.from(e.dataTransfer.files));
     });
 
-    // Controls
     this.aspectRatioSelect.addEventListener('change', () => this.updateAndRender());
     this.borderSlider.addEventListener('input', () => {
       this.borderValue.textContent = this.borderSlider.value;
@@ -171,7 +142,6 @@ class FrameEditor {
       this.updateAndRender();
     });
 
-    // Border presets
     this.presetButtonsContainer.addEventListener('click', e => {
       const btn = e.target.closest('.preset-btn');
       if (!btn) return;
@@ -181,7 +151,6 @@ class FrameEditor {
       this.updateAndRender();
     });
 
-    // Background controls
     this.bgTypeSelect.addEventListener('change', () => {
       const isBlur = this.bgTypeSelect.value === 'blur';
       this.colorControl.classList.toggle('hidden', isBlur);
@@ -191,16 +160,13 @@ class FrameEditor {
     this.bgColor.addEventListener('input', () => this.updateAndRender());
     this.blurAmount.addEventListener('input', () => this.updateAndRender());
 
-    // Navigation
     this.prevBtn.addEventListener('click', () => this.navigateTo(this.currentIndex - 1));
     this.nextBtn.addEventListener('click', () => this.navigateTo(this.currentIndex + 1));
 
-    // Actions
     this.downloadBtn.addEventListener('click', () => this.downloadCurrent());
     this.copyBtn.addEventListener('click', () => this.copyToClipboard());
     this.downloadAllBtn.addEventListener('click', () => this.downloadAll());
 
-    // Keyboard shortcuts
     document.addEventListener('keydown', e => {
       if (e.target.matches('input, select')) return;
       if (this.images.length === 0 && e.key !== 'Escape') return;
@@ -228,6 +194,7 @@ class FrameEditor {
           return this.loadImage(converted);
         } catch (err) {
           console.error('HEIC conversion failed:', err);
+          return null;
         }
       }
       return this.loadImage(file);
@@ -235,7 +202,6 @@ class FrameEditor {
 
     this.images = await Promise.all(files.map(processFile));
     this.currentIndex = 0;
-    // Clear HEIC cache after images are loaded to free memory
     this.heicCache.clear();
     this.dropText.classList.remove('processing');
     this.updateUI();
@@ -254,11 +220,7 @@ class FrameEditor {
     }
 
     const blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.95 });
-    const converted = new File(
-      [blob],
-      file.name.replace(/\.heic$/i, '.jpg'),
-      { type: 'image/jpeg' }
-    );
+    const converted = new File([blob], file.name.replace(/\.heic$/i, '.jpg'), { type: 'image/jpeg' });
     this.heicCache.set(cacheKey, converted);
     return converted;
   }
@@ -269,14 +231,8 @@ class FrameEditor {
       const img = new Image();
 
       img.onload = () => {
-        // NOTE: At this point, the image is loaded and we can revoke the
-        // original object URL to free up some memory. The image objects
-        // still hold the decoded data after the URL has been revoked.
         URL.revokeObjectURL(objectURL);
-        resolve({
-          img,
-          originalName: file.originalName || file.name
-        });
+        resolve({ img, originalName: file.originalName ?? file.name });
       };
 
       img.onerror = () => {
@@ -351,10 +307,8 @@ class FrameEditor {
   calculateOutputDimensions(img) {
     const [ratioW, ratioH] = this.aspectRatioSelect.value.split(':').map(Number);
     const targetRatio = ratioW / ratioH;
-    const baseDimension = Math.min(
-      Math.max(img.width, img.height),
-      FrameEditor.config.maxDimension
-    );
+    const maxDim = FrameEditor.config.maxDimension;
+    const baseDimension = Math.min(Math.max(img.width, img.height), maxDim);
 
     let width, height;
     if (targetRatio >= 1) {
@@ -365,8 +319,6 @@ class FrameEditor {
       width = Math.round(height * targetRatio);
     }
 
-    // Clamp to max dimension
-    const maxDim = FrameEditor.config.maxDimension;
     if (width > maxDim) {
       width = maxDim;
       height = Math.round(width / targetRatio);
@@ -389,7 +341,6 @@ class FrameEditor {
     this.canvas.width = width;
     this.canvas.height = height;
 
-    // Draw background
     if (this.bgTypeSelect.value === 'blur') {
       const blurAmount = parseInt(this.blurAmount.value, 10) || 15;
       this.drawBlurredBackground(img, blurAmount);
@@ -398,7 +349,6 @@ class FrameEditor {
       this.ctx.fillRect(0, 0, width, height);
     }
 
-    // Draw centered image with border
     const availableWidth = width - border * 2;
     const availableHeight = height - border * 2;
     const scale = Math.min(availableWidth / img.width, availableHeight / img.height);
@@ -419,22 +369,15 @@ class FrameEditor {
     const x = (this.canvas.width - w) / 2;
     const y = (this.canvas.height - h) / 2;
 
-    // Create temp canvas to draw and blur the background
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = this.canvas.width;
     tempCanvas.height = this.canvas.height;
     const tempCtx = tempCanvas.getContext('2d');
 
-    // Draw the scaled image
     tempCtx.drawImage(img, x, y, w, h);
-
-    // Apply StackBlur (works on all browsers including Safari/iOS)
     StackBlur.canvasRGBA(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, blurPx);
-
-    // Draw the blurred result onto main canvas
     this.ctx.drawImage(tempCanvas, 0, 0);
 
-    // Free temp canvas memory explicitly
     tempCanvas.width = 0;
     tempCanvas.height = 0;
   }
@@ -469,9 +412,7 @@ class FrameEditor {
 
     try {
       this.canvas.toBlob(async blob => {
-        await navigator.clipboard.write([
-          new ClipboardItem({ 'image/png': blob })
-        ]);
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
 
         const originalText = this.copyBtn.textContent;
         this.copyBtn.textContent = 'Copied!';
@@ -489,48 +430,59 @@ class FrameEditor {
     if (!this.hasImages()) return;
 
     const originalText = this.downloadAllBtn.textContent;
-    this.downloadAllBtn.disabled = true;
-
-    const zip = new JSZip();
     const originalIndex = this.currentIndex;
 
-    for (let i = 0; i < this.images.length; i++) {
-      this.downloadAllBtn.textContent = `Processing ${i + 1}/${this.images.length}`;
-      this.navigateTo(i);
-      await new Promise(resolve => setTimeout(resolve, 50));
+    try {
+      this.downloadAllBtn.disabled = true;
+      const zip = new JSZip();
 
-      const blob = await new Promise(resolve => {
-        this.canvas.toBlob(resolve, 'image/png');
+      for (let i = 0; i < this.images.length; i++) {
+        this.downloadAllBtn.textContent = `Processing ${i + 1}/${this.images.length}`;
+        this.navigateTo(i);
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        const blob = await new Promise(resolve => {
+          this.canvas.toBlob(resolve, 'image/png');
+        });
+
+        zip.file(this.getFilename(i), blob, {
+          compression: 'DEFLATE',
+          compressionOptions: { level: 6 }
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+
+      this.downloadAllBtn.textContent = 'Generating ZIP...';
+      const zipBlob = await zip.generateAsync({
+        type: 'blob',
+        compression: 'DEFLATE',
+        compressionOptions: { level: 6 },
+        streamFiles: true
       });
 
-      zip.file(this.getFilename(i), blob);
-
-      // Yield to allow garbage collection between images
-      await new Promise(resolve => setTimeout(resolve, 10));
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(zipBlob);
+      a.download = 'frame_export.zip';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } finally {
+      this.navigateTo(originalIndex);
+      this.downloadAllBtn.textContent = originalText;
+      this.downloadAllBtn.disabled = false;
     }
-
-    this.downloadAllBtn.textContent = 'Generating ZIP...';
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(zipBlob);
-    a.download = 'frame_export.zip';
-    a.click();
-    URL.revokeObjectURL(a.href);
-
-    this.navigateTo(originalIndex);
-    this.downloadAllBtn.textContent = originalText;
-    this.downloadAllBtn.disabled = false;
   }
 
   saveSettings() {
-    localStorage.setItem('frame_settings', JSON.stringify({
-      ratio: this.aspectRatioSelect.value,
-      border: this.borderSlider.value,
-      bgType: this.bgTypeSelect.value,
-      bgColor: this.bgColor.value,
-      blurAmount: this.blurAmount.value
-    }));
+    try {
+      localStorage.setItem('frame_settings', JSON.stringify({
+        ratio: this.aspectRatioSelect.value,
+        border: this.borderSlider.value,
+        bgType: this.bgTypeSelect.value,
+        bgColor: this.bgColor.value,
+        blurAmount: this.blurAmount.value
+      }));
+    } catch (e) { }
   }
 
   loadSettings() {
@@ -538,25 +490,20 @@ class FrameEditor {
       const saved = JSON.parse(localStorage.getItem('frame_settings'));
       if (!saved) return;
 
-      this.aspectRatioSelect.value = saved.ratio || '1:1';
-      this.borderSlider.value = saved.border || 0;
+      this.aspectRatioSelect.value = saved.ratio ?? '1:1';
+      this.borderSlider.value = saved.border ?? 0;
       this.borderValue.textContent = this.borderSlider.value;
-      this.bgTypeSelect.value = saved.bgType || 'color';
-      this.bgColor.value = saved.bgColor || '#000000';
-      this.blurAmount.value = saved.blurAmount || 15;
+      this.bgTypeSelect.value = saved.bgType ?? 'color';
+      this.bgColor.value = saved.bgColor ?? '#000000';
+      this.blurAmount.value = saved.blurAmount ?? 15;
 
       const isBlur = this.bgTypeSelect.value === 'blur';
       this.colorControl.classList.toggle('hidden', isBlur);
       this.blurControl.classList.toggle('hidden', !isBlur);
 
       this.updatePresetButtons();
-    } catch (e) {
-      // Silently ignore localStorage errors
-    }
+    } catch (e) { }
   }
 }
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  new FrameEditor();
-});
+document.addEventListener('DOMContentLoaded', () => new FrameEditor());
