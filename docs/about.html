@@ -1,107 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About - Frame</title>
-    <meta
-      name="description"
-      content="About Frame: Add borders and blur to images locally in your browser."
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/soot.css@1.0.1/soot.min.css"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/x-icon" href="favicon.png" />
-  </head>
-  <body>
-    <header>
-      <h1>Frame</h1>
-      <p>Add borders and blur to images.</p>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-        </ul>
-      </nav>
-    </header>
 
-    <main>
-      <section>
-        <h2>What is Frame?</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - Frame</title>
+  <meta name="description" content="About Frame: Add borders and blur to images locally in your browser." />
+  <link rel="stylesheet" href="https://unpkg.com/soot.css@1.0.1/soot.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20144%20144%22%20width%3D%22144%22%20height%3D%22144%22%3E%0A%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%230A0A0A%22%2F%3E%0A%20%20%3Ctext%20x%3D%2250%25%22%20y%3D%2256%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22Helvetica%2C%20Arial%2C%20sans-serif%22%20font-size%3D%22132%22%20font-weight%3D%22bold%22%20fill%3D%22%23C85A3A%22%3EF%3C%2Ftext%3E%0A%3C%2Fsvg%3E">
+</head>
 
-        <p>
-          Frame is a simple tool for adding borders to images without cropping.
-          Everything runs in your browser.
-        </p>
+<body>
+  <header>
+    <h1>Frame</h1>
+    <p>Add borders and blur to images.</p>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </header>
 
-        <p>
-          Frame was inspired by <a href="https://padsnap.app/">PadSnap</a> and
-          tries to iterate on it using the
-          <a href="https://brutalist.systems/">brutalist.systems</a> concept. My
-          goal is to build software that brings a bit of joy to people instead
-          of extracting value. Frame preserves your image quality (up to 4096px)
-          and your privacy. Once loaded, it works offline.
-        </p>
+  <main>
+    <section>
+      <h2>What is Frame?</h2>
 
-        <p>
-          There are no ads, no artificial limits, no dark patterns, and no
-          monetization.
-        </p>
-      </section>
-
-      <section>
-        <h2>Usage</h2>
-        <p>
-          Drag images onto the page or click to select. Frame supports HEIC
-          files from iPhones and will convert them automatically.
-        </p>
-
-        <h3>Options</h3>
-        <p>
-          The <b>aspect ratio</b> dropdown is organized by orientation. If
-          you're posting to Instagram, 1:1 or 4:5 works well. For presentations
-          or YouTube, try 16:9. The classic photo formats (3:2, 2:3) match what
-          most cameras shoot and what prints expect. Your image gets centered
-          and scaled to fit whatever ratio you pick.
-        </p>
-
-        <p>
-          <b>Borders</b> can go from 0 to 200 pixels. 50-100px gives a lovely
-          gallery feel without overwhelming the image. The preset buttons are
-          there because dragging the slider gets tedious when you know what you
-          want.
-        </p>
-
-        <p>
-          For <b>backgrounds</b>, you have two options. Solid color is clean and
-          classic - black for that museum wall look, white for prints, or match
-          your brand colors. The blur option stretches your image to fill the
-          frame and blurs it, which works nicely when the border color would
-          clash with your photo. Adjust the blur amount until it looks right to
-          you.
-        </p>
-
-        <h3>Shortcuts</h3>
-        <dl>
-          <dt><kbd>Space</kbd></dt>
-          <dd>Download the selected image.</dd>
-          <dt><kbd>←→</kbd></dt>
-          <dd>Navigate between images.</dd>
-          <dt><kbd>Esc</kbd></dt>
-          <dd>Clear all images and start over.</dd>
-        </dl>
-      </section>
-    </main>
-
-    <footer>
       <p>
-        Made with <span style="color: var(--color-accent)">♡</span> at
-        <a href="https://brutalist.systems/" target="_blank" rel="noopener"
-          >brutalist.systems</a
-        >
+        Frame is a simple tool for adding borders to images without cropping.
+        Everything runs in your browser.
       </p>
-    </footer>
-  </body>
+
+      <p>
+        Frame was inspired by <a href="https://padsnap.app/">PadSnap</a> and
+        tries to iterate on it using the
+        <a href="https://brutalist.systems/">brutalist.systems</a> concept. My
+        goal is to build software that brings a bit of joy to people. Frame preserves your image quality (up to 4096px)
+        and your privacy. Once loaded, it works offline.
+      </p>
+
+      <p>
+        There are no ads, no artificial limits, no dark patterns, and no
+        monetization.
+      </p>
+    </section>
+
+    <section>
+      <h2>Usage</h2>
+      <p>
+        Drag images onto the page or click to select. Frame supports HEIC
+        files from iPhones and will convert them automatically.
+      </p>
+
+      <h3>Options</h3>
+      <p>
+        The <b>aspect ratio</b> dropdown is organized by orientation. If
+        you're posting to Instagram, 1:1 or 4:5 works well. For presentations
+        or YouTube, try 16:9. The classic photo formats (3:2, 2:3) match what
+        most cameras shoot and what prints expect. Your image gets centered
+        and scaled to fit whatever ratio you pick.
+      </p>
+
+      <p>
+        <b>Borders</b> can go from 0 to 200 pixels. 50-100px gives a lovely
+        gallery feel without overwhelming the image. The preset buttons are
+        there because dragging the slider gets tedious when you know what you
+        want.
+      </p>
+
+      <p>
+        For <b>backgrounds</b>, you have two options. Solid color is clean and
+        classic - black for that museum wall look, white for prints, or match
+        your brand colors. The blur option stretches your image to fill the
+        frame and blurs it, which works nicely when the border color would
+        clash with your photo. Adjust the blur amount until it looks right to
+        you.
+      </p>
+
+      <h3>Shortcuts</h3>
+      <dl>
+        <dt><kbd>Space</kbd></dt>
+        <dd>Download the selected image.</dd>
+        <dt><kbd>←→</kbd></dt>
+        <dd>Navigate between images.</dd>
+        <dt><kbd>Esc</kbd></dt>
+        <dd>Clear all images and start over.</dd>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Made with <span style="color: var(--color-accent)">♡</span> at
+      <a href="https://brutalist.systems/" target="_blank" rel="noopener">brutalist.systems</a>
+    </p>
+  </footer>
+</body>
+
 </html>
