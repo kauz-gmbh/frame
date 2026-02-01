@@ -1,129 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Frame</title>
-    <meta
-      name="description"
-      content="Add borders to images. All processing happens locally."
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/soot.css@1.0.1/soot.min.css"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="icon" type="image/x-icon" href="icons/favicon.png" />
-    <style></style>
-  </head>
-  <body>
-    <header>
-      <h1>Frame</h1>
-      <p>Add borders and blur to images.</p>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-        </ul>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frame</title>
+  <meta name="description" content="Add borders to images. All processing happens locally." />
+  <link rel="stylesheet" href="https://unpkg.com/soot.css@1.0.1/soot.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20144%20144%22%20width%3D%22144%22%20height%3D%22144%22%3E%0A%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%230A0A0A%22%2F%3E%0A%20%20%3Ctext%20x%3D%2250%25%22%20y%3D%2256%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22Helvetica%2C%20Arial%2C%20sans-serif%22%20font-size%3D%22132%22%20font-weight%3D%22bold%22%20fill%3D%22%23C85A3A%22%3EF%3C%2Ftext%3E%0A%3C%2Fsvg%3E">
+  <style></style>
+</head>
+
+<body>
+  <header>
+    <h1>Frame</h1>
+    <p>Add borders and blur to images.</p>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="drop-zone" role="button" tabindex="0" aria-label="File upload area">
+      <p id="drop-text">Drag & drop images or click to select</p>
+      <input type="file" id="file-input" accept="image/*,.heic,.HEIC" multiple hidden />
+    </section>
+
+    <form id="options-area" class="hidden">
+      <fieldset class="form-group">
+        <label for="aspect-ratio">Aspect Ratio</label>
+        <select id="aspect-ratio">
+          <!-- Populated by JavaScript -->
+        </select>
+      </fieldset>
+
+      <fieldset class="form-group">
+        <label for="border-slider">Border</label>
+        <div class="slider-row">
+          <input type="range" id="border-slider" />
+          <output><strong><span id="border-value"></span>px</strong></output>
+        </div>
+        <div class="preset-buttons">
+          <!-- Populated by JavaScript -->
+        </div>
+      </fieldset>
+
+      <fieldset class="form-group">
+        <label for="bg-type">Background</label>
+        <select id="bg-type">
+          <!-- Populated by JavaScript -->
+        </select>
+      </fieldset>
+
+      <fieldset class="form-group" id="color-control">
+        <label for="bg-color">Color</label>
+        <input type="color" id="bg-color" />
+      </fieldset>
+
+      <fieldset class="form-group hidden" id="blur-control">
+        <label for="blur-amount">Blur Amount</label>
+        <input type="number" id="blur-amount" />
+      </fieldset>
+    </form>
+
+    <section id="preview-area" class="hidden">
+      <nav class="nav-controls" aria-label="Image navigation">
+        <button id="prev-btn" disabled>Previous</button>
+        <span class="image-counter" role="status"><span id="current-num">1</span> of
+          <span id="total-num">1</span></span>
+        <button id="next-btn" disabled>Next</button>
       </nav>
-    </header>
 
-    <main>
-      <section
-        id="drop-zone"
-        role="button"
-        tabindex="0"
-        aria-label="File upload area"
-      >
-        <p id="drop-text">Drag & drop images or click to select</p>
-        <input
-          type="file"
-          id="file-input"
-          accept="image/*,.heic,.HEIC"
-          multiple
-          hidden
-        />
-      </section>
+      <figure>
+        <canvas id="preview-canvas" class="hidden"></canvas>
+        <figcaption class="image-caption" id="image-caption"></figcaption>
+      </figure>
 
-      <form id="options-area" class="hidden">
-        <fieldset class="form-group">
-          <label for="aspect-ratio">Aspect Ratio</label>
-          <select id="aspect-ratio">
-            <!-- Populated by JavaScript -->
-          </select>
-        </fieldset>
+      <menu class="action-buttons">
+        <button id="download-btn">Download</button>
+        <button id="copy-btn">Copy</button>
+        <button id="download-all-btn" class="hidden">Download All</button>
+      </menu>
 
-        <fieldset class="form-group">
-          <label for="border-slider">Border</label>
-          <div class="slider-row">
-            <input type="range" id="border-slider" />
-            <output
-              ><strong><span id="border-value"></span>px</strong></output
-            >
-          </div>
-          <div class="preset-buttons">
-            <!-- Populated by JavaScript -->
-          </div>
-        </fieldset>
+      <aside class="keyboard-hints" role="note">
+        <kbd>Space</kbd> Download · <kbd>Esc</kbd> Clear ·
+        <kbd>←→</kbd> Navigate
+      </aside>
+    </section>
+  </main>
 
-        <fieldset class="form-group">
-          <label for="bg-type">Background</label>
-          <select id="bg-type">
-            <!-- Populated by JavaScript -->
-          </select>
-        </fieldset>
+  <footer>
+    <p>
+      Made with <span style="color: var(--color-accent)">♡</span> at
+      <a href="https://brutalist.systems/" target="_blank" rel="noopener">brutalist.systems</a>
+    </p>
+  </footer>
 
-        <fieldset class="form-group" id="color-control">
-          <label for="bg-color">Color</label>
-          <input type="color" id="bg-color" />
-        </fieldset>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stackblur-canvas@2.7.0/dist/stackblur.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
 
-        <fieldset class="form-group hidden" id="blur-control">
-          <label for="blur-amount">Blur Amount</label>
-          <input type="number" id="blur-amount" />
-        </fieldset>
-      </form>
-
-      <section id="preview-area" class="hidden">
-        <nav class="nav-controls" aria-label="Image navigation">
-          <button id="prev-btn" disabled>Previous</button>
-          <span class="image-counter" role="status"
-            ><span id="current-num">1</span> of
-            <span id="total-num">1</span></span
-          >
-          <button id="next-btn" disabled>Next</button>
-        </nav>
-
-        <figure>
-          <canvas id="preview-canvas" class="hidden"></canvas>
-          <figcaption class="image-caption" id="image-caption"></figcaption>
-        </figure>
-
-        <menu class="action-buttons">
-          <button id="download-btn">Download</button>
-          <button id="copy-btn">Copy</button>
-          <button id="download-all-btn" class="hidden">Download All</button>
-        </menu>
-
-        <aside class="keyboard-hints" role="note">
-          <kbd>Space</kbd> Download · <kbd>Esc</kbd> Clear ·
-          <kbd>←→</kbd> Navigate
-        </aside>
-      </section>
-    </main>
-
-    <footer>
-      <p>
-        Made with <span style="color: var(--color-accent)">♡</span> at
-        <a href="https://brutalist.systems/" target="_blank" rel="noopener"
-          >brutalist.systems</a
-        >
-      </p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stackblur-canvas@2.7.0/dist/stackblur.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-    <script src="js/app.js"></script>
-  </body>
 </html>
