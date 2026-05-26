@@ -1,17 +1,16 @@
 /* Drop zone */
 #drop-zone {
-  border: 2px dashed var(--color-border-light);
-  padding: calc(var(--spacing-unit) * 4);
+  border: 2px dashed var(--color-border-soft);
+  padding: calc(var(--space-unit) * 4);
   text-align: center;
   cursor: pointer;
-  margin: calc(var(--spacing-unit) * 2) 0;
-  background: var(--color-surface);
+  margin: calc(var(--space-unit) * 2) 0;
+  background: var(--color-bg-elev);
   color: var(--color-fg);
-  transition: all 0.2s ease;
 }
 #drop-zone:hover,
 #drop-zone:focus {
-  border-color: var(--color-muted);
+  border-color: var(--color-fg-muted);
   outline: none;
 }
 #drop-zone.drag-over {
@@ -19,11 +18,11 @@
   background: var(--color-bg);
 }
 #drop-zone.compact {
-  padding: calc(var(--spacing-unit) * 2);
-  font-size: 0.9rem;
+  padding: calc(var(--space-unit) * 2);
+  font-size: var(--fs-sm);
 }
 
-/* Form and fieldset reset */
+/* Form reset */
 #options-area {
   border: none;
   padding: 0;
@@ -33,12 +32,12 @@
 .form-group {
   border: none;
   padding: 0;
-  margin: calc(var(--spacing-unit) * 3) 0;
+  margin: calc(var(--space-unit) * 3) 0;
   min-width: 0;
 }
 .form-group label {
   display: block;
-  margin-bottom: var(--spacing-unit);
+  margin-bottom: var(--space-unit);
   font-weight: bold;
 }
 .form-group select,
@@ -48,15 +47,10 @@
   width: 100%;
 }
 
-/* Output element */
-output {
-  display: contents;
-}
-
 /* Slider value display */
 .slider-row {
   display: flex;
-  gap: calc(var(--spacing-unit) * 2);
+  gap: calc(var(--space-unit) * 2);
   align-items: center;
 }
 .slider-row input[type="range"] {
@@ -70,8 +64,8 @@ output {
 /* Preset buttons */
 .preset-buttons {
   display: flex;
-  gap: var(--spacing-unit);
-  margin-top: var(--spacing-unit);
+  gap: var(--space-unit);
+  margin-top: var(--space-unit);
   flex-wrap: wrap;
 }
 .preset-btn {
@@ -81,7 +75,7 @@ output {
 
 /* Preview area */
 #preview-area {
-  margin: calc(var(--spacing-unit) * 4) 0;
+  margin: calc(var(--space-unit) * 4) 0;
   text-align: center;
 }
 
@@ -94,26 +88,26 @@ output {
 #preview-canvas {
   max-width: 100%;
   height: auto;
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border-soft);
   display: block;
   margin: 0 auto;
 }
 
 /* Image caption */
 .image-caption {
-  margin: var(--spacing-unit) 0 calc(var(--spacing-unit) * 2);
-  font-size: 0.85rem;
-  color: var(--color-muted);
+  margin: var(--space-unit) 0 calc(var(--space-unit) * 2);
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
   text-align: center;
 }
 
-/* Navigation */
+/* Navigation controls */
 .nav-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--spacing-unit);
-  margin: calc(var(--spacing-unit) * 2) 0;
+  gap: var(--space-unit);
+  margin: calc(var(--space-unit) * 2) 0;
 }
 .nav-controls button {
   min-width: 100px;
@@ -124,13 +118,13 @@ output {
   font-weight: bold;
 }
 
-/* Action buttons - all same size */
+/* Action buttons */
 .action-buttons {
   display: flex;
-  gap: var(--spacing-unit);
+  gap: var(--space-unit);
   justify-content: center;
   flex-wrap: wrap;
-  margin: calc(var(--spacing-unit) * 2) 0;
+  margin: calc(var(--space-unit) * 2) 0;
   padding: 0;
   list-style: none;
 }
@@ -141,9 +135,9 @@ output {
 
 /* Keyboard hints */
 .keyboard-hints {
-  margin-top: calc(var(--spacing-unit) * 2);
-  font-size: 0.75rem;
-  color: var(--color-muted);
+  margin-top: calc(var(--space-unit) * 2);
+  font-size: var(--fs-xs);
+  color: var(--color-fg-muted);
   text-align: center;
 }
 
@@ -164,16 +158,6 @@ output {
   100% {
     content: "...";
   }
-}
-
-/* Footer */
-footer {
-  margin-top: calc(var(--spacing-unit) * 6);
-  padding-top: calc(var(--spacing-unit) * 2);
-  border-top: 1px solid var(--color-border-light);
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--color-muted);
 }
 
 /* Utility */

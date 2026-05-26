@@ -146,6 +146,7 @@ class FrameEditor {
       const btn = e.target.closest('.preset-btn');
       if (!btn) return;
       this.borderSlider.value = btn.dataset.border;
+      this.borderSlider.dispatchEvent(new Event('input'));
       this.borderValue.textContent = btn.dataset.border;
       this.updatePresetButtons();
       this.updateAndRender();
