@@ -1,4 +1,4 @@
-// Frame - brutalist.systems
+// Frame - spoons.fyi
 class FrameEditor {
   static config = {
     aspectRatios: {
