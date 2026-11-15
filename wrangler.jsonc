@@ -1,12 +1,12 @@
 {
   "name": "frame",
   "compatibility_date": "2026-11-01",
-  // Static-assets-only Worker: no script, Cloudflare serves docs/ directly.
+  "workers_dev": false,
+  "preview_urls": false,
   "assets": {
     "directory": "./docs",
     "not_found_handling": "404-page"
   },
-  // Wrangler creates the DNS record and certificate for this on deploy.
   "routes": [
     { "pattern": "frame.spoons.fyi", "custom_domain": true }
   ]
