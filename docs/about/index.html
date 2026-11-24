@@ -37,27 +37,34 @@
       <p>Choose your images with the file field on the <a href="/">home page</a>, or drag them onto the page. Frame supports HEIC files from iPhones and converts them automatically. The preview shows the result at once, and every setting you change redraws it.</p>
 
       <h3 id="aspect-ratio">Aspect Ratio</h3>
-      <p>The list is organized by orientation. If you're posting to Instagram, 1:1 or 4:5 works well. For presentations or YouTube, try 16:9. The classic photo formats, 3:2 and 2:3, match what most cameras shoot and what prints expect. Your image gets centered and scaled to fit whatever ratio you pick.</p>
+      <p>The list is organized by orientation. Original keeps the shape of your photo, so the frame is only as large as the photo with its style and its border. If you're posting to Instagram, 1:1 or 4:5 works well. For presentations or YouTube, try 16:9. The classic photo formats, 3:2 and 2:3, match what most cameras shoot and what prints expect. Your image gets centered and scaled to fit whatever ratio you pick.</p>
+
+      <h3 id="style">Style</h3>
+      <p>A style is a preset frame in the manner of a developed print. The even borders and the captions below the photo come in white and in black. Text on the photo sits at its lower edge. The film edge sets the lens and the camera above the photo in the amber type of a film strip, and frame numbers with their arrows below it. Write the name of your film into the caption field, and it takes the place of the lens. The instant print leaves a wide margin below the photo for a date or a few words of your own, in handwriting. A style grows with your photo, so it looks the same on a small image and on a large one.</p>
+      <p>The text comes from the camera data in the file: the camera, the lens, the focal length, the aperture, the shutter speed, the ISO value, and the date. For a phone or a compact camera, the focal length is the 35 mm equivalent, such as 26mm. Frame reads this data from JPEG and HEIC files. A file without it, such as a screenshot, leaves those lines empty.</p>
+      <p>The caption field replaces the main line of a style with your own text. It can mix words and camera data, as in <code>Lisbon · {date}</code>. The names in braces are <code>{camera}</code>, <code>{lens}</code>, <code>{focal}</code>, <code>{aperture}</code>, <code>{shutter}</code>, <code>{iso}</code>, and <code>{date}</code>.</p>
 
       <h3 id="border">Border</h3>
       <aside><p><b>Note.</b> The border is measured in pixels of the saved image, so the same number looks thinner on a larger image.</p></aside>
-      <p>Borders can go from 0 to 200 pixels. 50 to 100 pixels give a lovely gallery feel without overwhelming the image. The slider moves in steps of 5, and with the keyboard, the arrow keys do the same.</p>
+      <p>Borders can go from 0 to 200 pixels. 50 to 100 pixels give a lovely gallery feel without overwhelming the image. The slider moves in steps of 5, and with the keyboard, the arrow keys do the same. With a style, the border goes around the styled photo.</p>
 
       <h3 id="background">Background</h3>
-      <p>You have two options. A solid color is clean and classic: black for that museum wall look, white for prints, or your brand colors. The blurred image stretches your picture to fill the frame and blurs it, which works nicely when a border color would clash with your photo. Adjust the blur strength until it looks right to you.</p>
+      <p>You have two options. A solid color is clean and classic: black for that museum wall look, white for prints, or your brand colors. The blurred image stretches your picture to fill the frame and blurs it, which works nicely when a border color would clash with your photo. Adjust the blur strength until it looks right to you. With the original ratio and no border, nothing of the background shows.</p>
 
       <h3 id="saving">Saving</h3>
       <p>Every image is saved as a PNG file, named after the original and the aspect ratio. You can download the image on screen or copy it to the clipboard. With more than one image, the buttons above the preview step through them, and so do the <kbd>←</kbd> and <kbd>→</kbd> keys. One more button saves them all in a ZIP file, with the same settings.</p>
 
       <h2 id="privacy">Privacy</h2>
-      <p>Your images never leave your device. Frame reads them, draws the border, and saves the result in your browser, and no server sees any of it. Once the page has loaded, it works offline. Only the converter for HEIC files loads later, with the first such file, and only in browsers that cannot read the format themselves.</p>
+      <p>Your images never leave your device. Frame reads them, draws the border, and saves the result in your browser, and no server sees any of it. The camera data for a style is read in your browser as well, and the saved image carries none of it, apart from the text that you see on it.</p>
+      <p>Once the page has loaded, it works offline, with two exceptions that load later. The converter for HEIC files loads with the first such file, and only in browsers that cannot read the format themselves. The fonts of the styles load with the first style that has text.</p>
       <p>Frame keeps your settings in the storage of your browser, so that they are still there on your next visit. It sets no cookies and has no trackers. The only request to another server is for the icon in the browser tab, which comes from <a href="https://favicons.spoons.fyi/">Favicons</a>.</p>
 
       <h2 id="credits">Credits</h2>
-      <p>The blur is drawn with <a href="https://github.com/flozz/StackBlur">StackBlur</a>, and HEIC files are converted with <a href="https://github.com/alexcorvi/heic2any">heic2any</a>. Both are served from this site.</p>
+      <p>The blur is drawn with <a href="https://github.com/flozz/StackBlur">StackBlur</a>, and HEIC files are converted with <a href="https://github.com/hoppergee/heic-to">heic-to</a>, which is free software under the LGPL. The text of the styles is set in <a href="https://rsms.me/inter/">Inter</a>, <a href="https://github.com/IBM/plex">IBM Plex Mono</a>, <a href="https://github.com/jpt/barlow">Barlow Condensed</a>, and <a href="https://github.com/googlefonts/caveat">Caveat</a>. All of them are served from this site. The pages are styled with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> stylesheet.</p>
+      <p>The <a href="/licenses/">licenses</a> of these parts have a page of their own. It also says where to get the source of the converter.</p>
     </main>
     <footer>
-      <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a> with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> stylesheet. No uploads, no cookies, no trackers.</p>
+      <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a>. No uploads, no cookies, no trackers.</p>
     </footer>
   </body>
 </html>

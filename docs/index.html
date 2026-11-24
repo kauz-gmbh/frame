@@ -54,6 +54,7 @@
           <h2 id="settings-title">Settings</h2>
           <label for="ratio">Aspect ratio</label><br>
           <select id="ratio" name="ratio" autocomplete="off">
+            <option value="original" data-name="framed">Original, as the photo is</option>
             <option value="1:1" data-name="square" selected>1:1, square</option>
             <optgroup label="Landscape">
               <option value="3:2" data-name="photo">3:2, 35 mm photo</option>
@@ -66,6 +67,31 @@
               <option value="9:16" data-name="vertical">9:16, phone screen</option>
             </optgroup>
           </select><br>
+          <label for="preset">Style <small>A preset frame around the photo, or text on it.</small></label><br>
+          <select id="preset" name="preset" autocomplete="off">
+            <option value="none" selected>None</option>
+            <optgroup label="Even border">
+              <option value="border-white">White</option>
+              <option value="border-black">Black</option>
+            </optgroup>
+            <optgroup label="Caption below">
+              <option value="caption-white">White</option>
+              <option value="caption-black">Black</option>
+              <option value="caption-centered">White, centered</option>
+            </optgroup>
+            <optgroup label="Text on the photo">
+              <option value="overlay-white">White</option>
+              <option value="overlay-black">Black</option>
+            </optgroup>
+            <optgroup label="Analogue">
+              <option value="film-edge">Film edge</option>
+              <option value="instant">Instant print</option>
+            </optgroup>
+          </select><br>
+          <div id="caption-field" hidden>
+            <label for="caption-text">Caption <small>Leave it empty for the text of the style. Your own text can use {camera}, {lens}, {focal}, {aperture}, {shutter}, {iso}, and {date}.</small></label><br>
+            <input id="caption-text" name="caption" type="text" maxlength="120" autocomplete="off" spellcheck="false"><br>
+          </div>
           <label for="border">Border <small>The narrowest gap between the image and the edge.</small></label>
           <p class="slider">
             <input id="border" name="border" type="range" min="0" max="200" step="5" value="0" list="border-marks">
@@ -105,7 +131,7 @@
       </div>
     </main>
     <footer>
-      <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a> with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> stylesheet. No uploads, no cookies, no trackers.</p>
+      <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a>. No uploads, no cookies, no trackers.</p>
     </footer>
   </body>
 </html>

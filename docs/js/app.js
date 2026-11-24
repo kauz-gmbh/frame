@@ -1,4 +1,6 @@
-import { draw, read } from './frame.js';
+import { cameraData } from './exif.js';
+import { draw, prepare, read, ready } from './frame.js';
+import { STYLES } from './styles.js';
 import { crc32, zip } from './zip.js';
 
 const SETTINGS_KEY = 'frame_settings';
@@ -21,8 +23,8 @@ const downloadAllButton = byId('download-all');
 const clearButton = byId('clear');
 const saveStatus = byId('save-status');
 
-// Each entry is { name, file, blob }. Only the image on screen is read, as { entry, image },
-// so that a large set takes little memory.
+// Each entry is { name, file, blob, frame }. Only the image on screen is read, as
+// { entry, image, values }, so that a large set takes little memory.
 let images = [];
 let index = 0;
 let shown = null;
@@ -45,20 +47,16 @@ const chosen = () => ({
   background: fields.background.value,
   color: fields.color.value,
   blur: Number(fields.blur.value),
+  style: fields.preset.value,
+  caption: fields.caption.value.trim(),
 });
 
 // The converter is large, so it loads with the first HEIC file that the browser cannot read itself.
 let converter;
 const loadConverter = () => {
-  converter ??= new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = '/js/vendor/heic2any.js';
-    script.onload = () => resolve(window.heic2any);
-    script.onerror = () => {
-      converter = undefined;
-      reject(new Error('The converter for HEIC files did not load.'));
-    };
-    document.head.append(script);
+  converter ??= import('./vendor/heic-to.js').then(({ heicTo }) => heicTo, () => {
+    converter = undefined;
+    throw new Error('The converter for HEIC files did not load.');
   });
   return converter;
 };
@@ -73,10 +71,17 @@ const open = async (entry) => {
     if (entry.blob !== entry.file || !isHeic(entry.file)) throw error;
     announce(status, `Converting ${entry.name}.`);
     const convert = await loadConverter();
-    entry.blob = [await convert({ blob: entry.file, toType: 'image/jpeg', quality: 0.95 })].flat()[0];
+    entry.blob = await convert({ blob: entry.file, type: 'image/jpeg', quality: 0.95 });
     announce(status);
     return read(entry.blob);
   }
+};
+
+// The camera data for the text of a style, read once. It comes from the file as it was chosen,
+// because a converted HEIC file has none.
+const details = (entry) => {
+  entry.values ??= cameraData(entry.file).then((data) => ({ ...data, frame: entry.frame }));
+  return entry.values;
 };
 
 let queued = false;
@@ -86,8 +91,11 @@ const render = () => {
   requestAnimationFrame(() => {
     queued = false;
     if (!shown) return;
-    const { entry, image } = shown;
-    const { width, height } = draw(canvas, image, chosen());
+    const options = chosen();
+    // The first style with text waits for its fonts. Until then, the last drawing stays.
+    if (!ready(options)) return prepare(options).then(render);
+    const { entry, image, values } = shown;
+    const { width, height } = draw(canvas, image, options, values);
     caption.textContent = `${entry.name}: ${image.width} × ${image.height} pixels, framed to ${width} × ${height} pixels.`;
   });
 };
@@ -133,13 +141,14 @@ const show = async (next) => {
   const entry = images[index];
   const turn = ++turns;
   let image;
+  let values;
   try {
-    image = await open(entry);
+    [image, values] = await Promise.all([open(entry), details(entry)]);
   } catch {
     return remove(entry);
   }
   if (turn !== turns) return;
-  shown = { entry, image };
+  shown = { entry, image, values };
   editor.hidden = false;
   render();
 };
@@ -151,7 +160,12 @@ const load = (files) => {
   const problem = others.length
     ? ` ${others.length === 1 ? 'Not an image' : 'Not images'}: ${others.map((file) => file.name).join(', ')}.`
     : '';
-  const entries = files.filter((file) => !others.includes(file)).map((file) => ({ name: file.name, file, blob: file }));
+  // The film edge style shows a frame number. It is the end of the number in the name of the
+  // file, as in DSCF4217.jpg, or else the place of the image in the set.
+  const entries = files.filter((file) => !others.includes(file)).map((file, i) => {
+    const digits = file.name.replace(/\.[^.]+$/, '').match(/(\d+)\D*$/)?.[1];
+    return { name: file.name, file, blob: file, frame: String(digits ? Number(digits.slice(-2)) : i + 1) };
+  });
   if (!entries.length) return announce(status, `No image loaded.${problem}`);
   images = entries;
   announce(saveStatus);
@@ -165,6 +179,10 @@ const describe = () => {
   const blur = fields.background.value === 'blur';
   byId('color-field').hidden = blur;
   byId('blur-field').hidden = !blur;
+  // The caption replaces one line of the style. A style without such a line takes none.
+  const line = STYLES[fields.preset.value].lines.find((other) => other.edit);
+  byId('caption-field').hidden = !line;
+  fields.caption.placeholder = line?.text ?? '';
 };
 
 // The browser may refuse storage, as in a private window.
@@ -176,6 +194,8 @@ const store = () => {
       bgType: fields.background.value,
       bgColor: fields.color.value,
       blurAmount: fields.blur.value,
+      style: fields.preset.value,
+      caption: fields.caption.value,
     }));
   } catch {}
 };
@@ -188,6 +208,8 @@ const restore = () => {
     if (['color', 'blur'].includes(saved.bgType)) fields.background.value = saved.bgType;
     if (/^#[0-9a-f]{6}$/i.test(saved.bgColor)) fields.color.value = saved.bgColor;
     if (Number.isFinite(Number(saved.blurAmount))) fields.blur.value = saved.blurAmount;
+    if (Object.hasOwn(STYLES, saved.style)) fields.preset.value = saved.style;
+    if (typeof saved.caption === 'string') fields.caption.value = saved.caption.slice(0, fields.caption.maxLength);
   } catch {}
 };
 
@@ -228,7 +250,8 @@ const scratch = document.createElement('canvas');
 let queue = Promise.resolve();
 const frameHere = (entry, options) => {
   const result = queue.then(async () => {
-    draw(scratch, await open(entry), options);
+    await prepare(options);
+    draw(scratch, await open(entry), options, await details(entry));
     const blob = await toPng(scratch);
     return { blob, crc: crc32(new Uint8Array(await blob.arrayBuffer())) };
   });
@@ -256,7 +279,7 @@ const downloadAll = async () => {
       const entry = batch[i];
       let result;
       if (worker) {
-        result = await ask(worker, { blob: entry.blob, settings: options }).catch((reason) => {
+        result = await ask(worker, { blob: entry.blob, settings: options, values: await details(entry) }).catch((reason) => {
           // An error event, not a message, means that the worker itself failed.
           if (reason instanceof Event) worker = null;
         });

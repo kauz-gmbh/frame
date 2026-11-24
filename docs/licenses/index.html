@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Licenses of Frame</title>
+    <meta name="description" content="The software and fonts by other people that Frame serves, their licenses, and where to get the source of the HEIC converter.">
+    <meta property="og:title" content="Licenses of Frame">
+    <meta property="og:description" content="The software and fonts by other people that Frame serves, their licenses, and where to get the source of the HEIC converter.">
+    <meta property="og:url" content="https://frame.spoons.fyi/licenses/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/css/brutalist.css">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/dark/sans/F.png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
+  </head>
+  <body>
+    <a href="#main">Skip to main content</a>
+    <header>
+      <a href="/">Frame</a>
+      <nav aria-label="Primary">
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+    <main id="main" class="reading">
+      <hgroup>
+        <h1>Licenses</h1>
+        <p>The software and fonts by other people that Frame serves.</p>
+      </hgroup>
+
+      <p>Frame's own code is under the MIT license. The parts below are the work of others and keep their own licenses.</p>
+
+      <h2 id="converter">The Converter for HEIC Files</h2>
+      <p>Frame uses a library to convert HEIC files in browsers that cannot read the format themselves. The library is free software under the GNU Lesser General Public License, version 3 or any later version (LGPL). It is made of three works, and each is under that license:</p>
+      <ul>
+        <li><a href="https://github.com/hoppergee/heic-to">heic-to</a> 1.6.7, by Hopper Gee.</li>
+        <li><a href="https://github.com/strukturag/libheif">libheif</a> 1.23.7, copyright 2017–2020 Struktur AG and 2017–2026 Dirk Farin.</li>
+        <li><a href="https://github.com/strukturag/libde265">libde265</a> 1.0.16, copyright 2013–2014 Struktur AG.</li>
+      </ul>
+      <p>The library comes without any warranty. The license says so in full.</p>
+
+      <h3 id="license-texts">The License Texts</h3>
+      <p>The LGPL adds to the terms of the GNU General Public License, version 3, so both texts belong to it:</p>
+      <ul>
+        <li><a href="/licenses/lgpl-3.0.txt">GNU Lesser General Public License, version 3</a></li>
+        <li><a href="/licenses/gpl-3.0.txt">GNU General Public License, version 3</a></li>
+      </ul>
+
+      <h3 id="file">The File on This Site</h3>
+      <p>The library is one file, <a href="/js/vendor/heic-to.js"><code>/js/vendor/heic-to.js</code></a>. It is the file <code>dist/csp/heic-to.js</code> of the heic-to package, version 1.6.7, as published. The only change is a comment of three lines at its top, which names the library, its license, and this page.</p>
+
+      <h3 id="source">The Source</h3>
+      <p>The file is built from these sources:</p>
+      <ul>
+        <li>heic-to 1.6.7: <a href="https://github.com/hoppergee/heic-to/tree/v1.6.7">github.com/hoppergee/heic-to, tag v1.6.7</a>. The same is in the <a href="https://registry.npmjs.org/heic-to/-/heic-to-1.6.7.tgz">package on npm</a>.</li>
+        <li>libheif 1.23.7: <a href="https://github.com/strukturag/libheif/releases/tag/v1.23.7">github.com/strukturag/libheif, release v1.23.7</a>.</li>
+        <li>libde265 1.0.16: <a href="https://github.com/strukturag/libde265/releases/tag/v1.0.16">github.com/strukturag/libde265, release v1.0.16</a>.</li>
+      </ul>
+      <p>To build the file, libheif and libde265 are compiled to JavaScript with the script <code>build-emscripten.sh</code> of libheif, with the settings <code>USE_UNSAFE_EVAL=0</code> and <code>LIBDE265_VERSION=1.0.16</code>. The result is in the source of heic-to as <code>src/lib/libheif-without-unsafe-eval.js</code>. The script <code>esbuild.mjs</code> of heic-to then puts it into one file together with the code of heic-to.</p>
+
+      <h3 id="changes">Using a Changed Version</h3>
+      <p>You may change the library and use your version with Frame. The library stays a file of its own, and the page loads it only when it meets the first HEIC file that the browser cannot read. A file that takes its place must be a JavaScript module that exports a function <code>heicTo({ blob, type, quality })</code>, which gives back a promise of the converted image as a <code>Blob</code>.</p>
+      <p>Nothing in the terms of Frame keeps you from changing the library, or from taking Frame apart to find an error in your change.</p>
+
+      <h2 id="other">Other Parts</h2>
+      <ul>
+        <li><a href="https://github.com/flozz/StackBlur">StackBlur</a> 2.7.0 draws the blur. It is under the MIT license, copyright 2010 Mario Klingemann.</li>
+        <li><a href="https://rsms.me/inter/">Inter</a> is under the <a href="/fonts/inter-LICENSE.txt">SIL Open Font License 1.1</a>, copyright 2016 The Inter Project Authors.</li>
+        <li><a href="https://github.com/IBM/plex">IBM Plex Mono</a> is under the <a href="/fonts/ibm-plex-mono-LICENSE.txt">SIL Open Font License 1.1</a>, copyright 2017 IBM Corp.</li>
+        <li><a href="https://github.com/jpt/barlow">Barlow Condensed</a> is under the <a href="/fonts/barlow-condensed-LICENSE.txt">SIL Open Font License 1.1</a>, copyright 2017 The Barlow Project Authors.</li>
+        <li><a href="https://github.com/googlefonts/caveat">Caveat</a> is under the <a href="/fonts/caveat-LICENSE.txt">SIL Open Font License 1.1</a>, copyright 2014 The Caveat Project Authors.</li>
+      </ul>
+    </main>
+    <footer>
+      <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a>. No uploads, no cookies, no trackers.</p>
+    </footer>
+  </body>
+</html>
