@@ -175,6 +175,7 @@ const tokens = ({ make, model, shutter, aperture, iso, date, focal, focal35, len
   // The lens of a small sensor, as in a phone, is known by its 35 mm equivalent: 26mm, not 5.96mm.
   const small = positive(focal35) && (!positive(focal) || focal35 / focal > 2.5);
   const length = small ? focal35 : focal;
+  const [, year, month, day] = /^(\d{4}):(\d\d):(\d\d)/.exec(date) ?? [];
   return {
     camera: model ? (maker && !named ? `${maker} ${model}` : model) : '',
     lens: lensName(lens, model),
@@ -182,11 +183,19 @@ const tokens = ({ make, model, shutter, aperture, iso, date, focal, focal35, len
     aperture: positive(aperture) ? `f/${number(aperture)}` : '',
     shutter: positive(shutter) ? (shutter >= 0.3 ? `${number(shutter)}s` : `1/${Math.round(1 / shutter)}s`) : '',
     iso: positive(iso) ? `ISO ${iso}` : '',
-    date: /^\d{4}:\d\d:\d\d/.test(date) ? date.slice(0, 10).replaceAll(':', '-') : '',
+    date: year ? `${year}-${month}-${day}` : '',
+    // The parts of the date, for a date stamp: two digits each.
+    yy: year ? year.slice(2) : '',
+    mm: month ?? '',
+    dd: day ?? '',
+    // The month and the day as a date back shows them: without a zero in front, and with a
+    // space as wide as a digit in its place, so that the digits stay in their columns.
+    m: month ? String(Number(month)).padStart(2, '\u2007') : '',
+    d: day ? String(Number(day)).padStart(2, '\u2007') : '',
   };
 };
 
-// Returns { camera, lens, focal, aperture, shutter, iso, date } as text. A file without
+// Returns { camera, lens, focal, aperture, shutter, iso, date, yy, mm, dd, m, d } as text. A file without
 // camera data, or one of another kind, gives empty text for each. The kind is read from the
 // first bytes, because the name of a file can be wrong.
 export const cameraData = async (blob) => {

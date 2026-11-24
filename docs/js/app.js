@@ -96,7 +96,11 @@ const render = () => {
     if (!ready(options)) return prepare(options).then(render);
     const { entry, image, values } = shown;
     const { width, height } = draw(canvas, image, options, values);
-    caption.textContent = `${entry.name}: ${image.width} × ${image.height} pixels, framed to ${width} × ${height} pixels.`;
+    // A style with text shows little on a file without camera data, and the reason is not obvious.
+    const bare = STYLES[options.style].lines.length && !options.caption
+      && !Object.entries(values).some(([name, text]) => name !== 'frame' && text);
+    const note = bare ? ' The file has no camera data, so the lines of the style that show it stay empty.' : '';
+    caption.textContent = `${entry.name}: ${image.width} × ${image.height} pixels, framed to ${width} × ${height} pixels.${note}`;
   });
 };
 
@@ -179,6 +183,10 @@ const describe = () => {
   const blur = fields.background.value === 'blur';
   byId('color-field').hidden = blur;
   byId('blur-field').hidden = !blur;
+  // A frame of the original ratio without a border is all image and style.
+  const covered = fields.ratio.value === 'original' && Number(fields.border.value) === 0;
+  byId('background').disabled = covered;
+  byId('background-note').hidden = !covered;
   // The caption replaces one line of the style. A style without such a line takes none.
   const line = STYLES[fields.preset.value].lines.find((other) => other.edit);
   byId('caption-field').hidden = !line;

@@ -38,6 +38,33 @@
   #status:not(:empty) {
     margin-block-start: var(--s-4);
   }
+
+  /* The styles on the About page, each on a sample image. */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    align-items: start;
+    gap: var(--s-6) var(--s-4);
+    margin-block: var(--s-6);
+  }
+  .gallery > figure {
+    margin: 0;
+  }
+
+  /* On a narrow screen, the settings are below the preview. The parts of the preview then
+     lie in the editor themselves, so that the canvas can stay at the top of the screen while
+     the settings move past it. */
+  @media (max-width: 40rem) {
+    .editor > section,
+    .editor > section > figure {
+      display: contents;
+    }
+    .editor > section > :not(figure),
+    .editor > section > figure > *,
+    .editor > form {
+      flex: 0 0 100%;
+    }
+  }
 }
 
 @layer components {
@@ -46,5 +73,32 @@
     display: block;
     max-block-size: 70vh;
     border: var(--border-thin) solid var(--border);
+  }
+
+  /* The line shows where a frame of the page's color ends, as around the preview. */
+  .gallery img {
+    display: block;
+    inline-size: 100%;
+    border: var(--border-thin) solid var(--border);
+  }
+
+  @media (max-width: 40rem) {
+    /* The canvas that stays at the top is a band as wide as the page, with the frame in its
+       middle. Its tint shows where a frame of the page's color ends. */
+    #canvas {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 1;
+      inline-size: 100%;
+      max-block-size: 38vh;
+      object-fit: contain;
+      border-width: 0 0 var(--border-thin);
+      background: var(--background-2);
+    }
+    /* The words below the heading take less of a small screen. */
+    #intro {
+      font-size: var(--fs-0);
+      line-height: var(--lh-body);
+    }
   }
 }

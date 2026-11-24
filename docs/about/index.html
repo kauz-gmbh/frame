@@ -11,10 +11,12 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
     <link rel="stylesheet" href="/css/brutalist.css">
+    <link rel="stylesheet" href="/css/site.css">
     <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
     <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png" media="(prefers-color-scheme: light)">
     <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/dark/sans/F.png" media="(prefers-color-scheme: dark)">
     <link rel="apple-touch-icon" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
+    <script type="module" src="/js/gallery.js"></script>
   </head>
   <body>
     <a href="#main">Skip to main content</a>
@@ -37,31 +39,52 @@
       <p>Choose your images with the file field on the <a href="/">home page</a>, or drag them onto the page. Frame supports HEIC files from iPhones and converts them automatically. The preview shows the result at once, and every setting you change redraws it.</p>
 
       <h3 id="aspect-ratio">Aspect Ratio</h3>
-      <p>The list is organized by orientation. Original keeps the shape of your photo, so the frame is only as large as the photo with its style and its border. If you're posting to Instagram, 1:1 or 4:5 works well. For presentations or YouTube, try 16:9. The classic photo formats, 3:2 and 2:3, match what most cameras shoot and what prints expect. Your image gets centered and scaled to fit whatever ratio you pick.</p>
+      <p>The list is organized by orientation. Original keeps the shape of your image, so the frame is only as large as the image with its style and its border. If you're posting to Instagram, 1:1 or 4:5 works well. For presentations or YouTube, try 16:9. The classic photo formats, 3:2 and 2:3, match what most cameras shoot and what prints expect. Your image gets centered and scaled to fit whatever ratio you pick.</p>
 
       <h3 id="style">Style</h3>
-      <p>A style is a preset frame in the manner of a developed print. The even borders and the captions below the photo come in white and in black. Text on the photo sits at its lower edge. The film edge sets the lens and the camera above the photo in the amber type of a film strip, and frame numbers with their arrows below it. Write the name of your film into the caption field, and it takes the place of the lens. The instant print leaves a wide margin below the photo for a date or a few words of your own, in handwriting. A style grows with your photo, so it looks the same on a small image and on a large one.</p>
-      <p>The text comes from the camera data in the file: the camera, the lens, the focal length, the aperture, the shutter speed, the ISO value, and the date. For a phone or a compact camera, the focal length is the 35 mm equivalent, such as 26mm. Frame reads this data from JPEG and HEIC files. A file without it, such as a screenshot, leaves those lines empty.</p>
-      <p>The caption field replaces the main line of a style with your own text. It can mix words and camera data, as in <code>Lisbon · {date}</code>. The names in braces are <code>{camera}</code>, <code>{lens}</code>, <code>{focal}</code>, <code>{aperture}</code>, <code>{shutter}</code>, <code>{iso}</code>, and <code>{date}</code>.</p>
+      <p>A style is a preset frame in the manner of a developed print. It grows with your image, so it looks the same on a small image and on a large one. The list has four groups, and the pictures below them show each style on a sample image.</p>
+      <ul>
+        <li><b>Border.</b> An even border around the image, in white or in black.</li>
+        <li><b>Caption below the image.</b> A wider margin below the image, with the camera and the lens on the left and the exposure and the date on the right. It comes in white, in black, and with centered text. The caption with colors adds the five main colors of the image as a row of chips.</li>
+        <li><b>On the image.</b> The camera and the exposure at the lower edge of the image, in white or in black. The date stamp burns the date into the corner in orange digits, as a compact camera of the 1990s did: the year after an apostrophe, then the month and the day. The viewfinder draws the brackets and the readout of a camera display.</li>
+        <li><b>Analogue.</b> The film edge sets the lens and the camera above the image in the amber type of a film strip, and frame numbers with their arrows below it. The film strip adds the perforations of 35 mm film, and it runs along the longer side of the image. The instant print leaves a wide margin below the image for a date or a few words of your own, in handwriting.</li>
+      </ul>
+      <div class="gallery wide" id="gallery" hidden>
+        <figure data-style="border-white" data-sample="boat"><figcaption>White border</figcaption></figure>
+        <figure data-style="border-black" data-sample="snow"><figcaption>Black border</figcaption></figure>
+        <figure data-style="caption-white" data-sample="lake"><figcaption>White caption</figcaption></figure>
+        <figure data-style="caption-black" data-sample="bus"><figcaption>Black caption</figcaption></figure>
+        <figure data-style="caption-centered" data-sample="sunset"><figcaption>Centered caption</figcaption></figure>
+        <figure data-style="palette" data-sample="boat"><figcaption>Caption with colors</figcaption></figure>
+        <figure data-style="overlay-white" data-sample="sunset"><figcaption>White text</figcaption></figure>
+        <figure data-style="overlay-black" data-sample="snow"><figcaption>Black text</figcaption></figure>
+        <figure data-style="date-stamp" data-sample="lake"><figcaption>Date stamp</figcaption></figure>
+        <figure data-style="viewfinder" data-sample="bus"><figcaption>Viewfinder</figcaption></figure>
+        <figure data-style="film-edge" data-sample="boat"><figcaption>Film edge</figcaption></figure>
+        <figure data-style="film-strip" data-sample="lighthouse"><figcaption>Film strip</figcaption></figure>
+        <figure data-style="instant" data-sample="lighthouse" data-caption="Chania, February 2015"><figcaption>Instant print</figcaption></figure>
+      </div>
+      <p>The text comes from the camera data in the file: the camera, the lens, the focal length, the aperture, the shutter speed, the ISO value, and the date. For a phone or a compact camera, the focal length is the 35 mm equivalent, such as 26mm. Frame reads this data from JPEG and HEIC files. A file without it, such as a screenshot, leaves those lines empty, and a note below the preview says so.</p>
+      <p>The caption field replaces the main line of a style with your own text. On the film edge and the film strip, that is the place for the name of your film. The text can mix words and camera data, as in <code>Lisbon · {date}</code>. The names in braces are <code>{camera}</code>, <code>{lens}</code>, <code>{focal}</code>, <code>{aperture}</code>, <code>{shutter}</code>, <code>{iso}</code>, and <code>{date}</code>. The parts of the date have names of their own: <code>{yy}</code>, <code>{mm}</code>, and <code>{dd}</code> have two digits each. <code>{m}</code> and <code>{d}</code> are the month and the day as a date stamp shows them, without a zero in front, so that a stamp in the European order reads <code>{d}  {m}  '{yy}</code>.</p>
 
       <h3 id="border">Border</h3>
       <aside><p><b>Note.</b> The border is measured in pixels of the saved image, so the same number looks thinner on a larger image.</p></aside>
-      <p>Borders can go from 0 to 200 pixels. 50 to 100 pixels give a lovely gallery feel without overwhelming the image. The slider moves in steps of 5, and with the keyboard, the arrow keys do the same. With a style, the border goes around the styled photo.</p>
+      <p>Borders can go from 0 to 200 pixels. 50 to 100 pixels give a lovely gallery feel without overwhelming the image. The slider moves in steps of 5, and with the keyboard, the arrow keys do the same. With a style, the border goes around the styled image.</p>
 
       <h3 id="background">Background</h3>
-      <p>You have two options. A solid color is clean and classic: black for that museum wall look, white for prints, or your brand colors. The blurred image stretches your picture to fill the frame and blurs it, which works nicely when a border color would clash with your photo. Adjust the blur strength until it looks right to you. With the original ratio and no border, nothing of the background shows.</p>
+      <p>You have two options. A solid color is clean and classic: black for that museum wall look, white for prints, or your brand colors. The blurred image stretches your picture to fill the frame and blurs it, which works nicely when a border color would clash with your photo. Adjust the blur strength until it looks right to you. With the original ratio and no border, nothing of the background shows, and the page switches these fields off.</p>
 
       <h3 id="saving">Saving</h3>
-      <p>Every image is saved as a PNG file, named after the original and the aspect ratio. You can download the image on screen or copy it to the clipboard. With more than one image, the buttons above the preview step through them, and so do the <kbd>←</kbd> and <kbd>→</kbd> keys. One more button saves them all in a ZIP file, with the same settings.</p>
+      <p>Every image is saved as a PNG file, named after the original and the aspect ratio. The original ratio adds <code>framed</code> to the name. You can download the image on screen or copy it to the clipboard. With more than one image, the buttons above the preview step through them, and so do the <kbd>←</kbd> and <kbd>→</kbd> keys. One more button saves them all in a ZIP file, with the same settings.</p>
 
       <h2 id="privacy">Privacy</h2>
-      <p>Your images never leave your device. Frame reads them, draws the border, and saves the result in your browser, and no server sees any of it. The camera data for a style is read in your browser as well, and the saved image carries none of it, apart from the text that you see on it.</p>
+      <p>Your images never leave your device. Frame reads them, draws the frame, and saves the result in your browser, and no server sees any of it. The camera data for a style is read in your browser as well, and the saved image carries none of it, apart from the text that you see on it.</p>
       <p>Once the page has loaded, it works offline, with two exceptions that load later. The converter for HEIC files loads with the first such file, and only in browsers that cannot read the format themselves. The fonts of the styles load with the first style that has text.</p>
       <p>Frame keeps your settings in the storage of your browser, so that they are still there on your next visit. It sets no cookies and has no trackers. The only request to another server is for the icon in the browser tab, which comes from <a href="https://favicons.spoons.fyi/">Favicons</a>.</p>
 
       <h2 id="credits">Credits</h2>
-      <p>The blur is drawn with <a href="https://github.com/flozz/StackBlur">StackBlur</a>, and HEIC files are converted with <a href="https://github.com/hoppergee/heic-to">heic-to</a>, which is free software under the LGPL. The text of the styles is set in <a href="https://rsms.me/inter/">Inter</a>, <a href="https://github.com/IBM/plex">IBM Plex Mono</a>, <a href="https://github.com/jpt/barlow">Barlow Condensed</a>, and <a href="https://github.com/googlefonts/caveat">Caveat</a>. All of them are served from this site. The pages are styled with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> stylesheet.</p>
-      <p>The <a href="/licenses/">licenses</a> of these parts have a page of their own. It also says where to get the source of the converter.</p>
+      <p>The blur is drawn with <a href="https://github.com/flozz/StackBlur">StackBlur</a>, and HEIC files are converted with <a href="https://github.com/hoppergee/heic-to">heic-to</a>, which is free software under the LGPL. The text of the styles is set in <a href="https://rsms.me/inter/">Inter</a>, <a href="https://github.com/IBM/plex">IBM Plex Mono</a>, <a href="https://github.com/jpt/barlow">Barlow Condensed</a>, <a href="https://github.com/googlefonts/caveat">Caveat</a>, and <a href="https://github.com/keshikan/DSEG">DSEG</a>. All of them are served from this site. The sample images of the styles are by DimiTalen, Dktue, Jebulon, and Balon Greyjoy, who gave them to the public domain. The pages are styled with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> stylesheet.</p>
+      <p>The <a href="/licenses/">licenses</a> of these parts have a page of their own. It also says where to get the source of the converter, and where each sample image is from.</p>
     </main>
     <footer>
       <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a>. No uploads, no cookies, no trackers.</p>

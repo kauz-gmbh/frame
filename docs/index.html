@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Frame: add borders and blur to images</title>
-    <meta name="description" content="Add borders and blur to images locally in your browser.">
-    <meta property="og:title" content="Frame: add borders and blur to images">
-    <meta property="og:description" content="Add borders and blur to images locally in your browser.">
+    <title>Frame: borders, blur, and frame styles for images</title>
+    <meta name="description" content="Add borders, a blurred background, and frame styles with the camera data to images, locally in your browser.">
+    <meta property="og:title" content="Frame: borders, blur, and frame styles for images">
+    <meta property="og:description" content="Add borders, a blurred background, and frame styles with the camera data to images, locally in your browser.">
     <meta property="og:url" content="https://frame.spoons.fyi/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
@@ -27,8 +27,11 @@
       </nav>
     </header>
     <main id="main">
-      <h1>Add Borders and Blur to Images</h1>
-      <p id="no-script">Frame needs JavaScript, because it draws the border in your browser and sends your images nowhere. Without it, add the border in an image editor on your device. <a href="/about/">About Frame</a> says more about how it works.</p>
+      <hgroup>
+        <h1>Add Borders, Blur, and Styles to Images</h1>
+        <p id="intro">Frame an image with a plain border, a blurred background, or a preset style that shows its camera data.</p>
+      </hgroup>
+      <p id="no-script">Frame needs JavaScript, because it draws the frame in your browser and sends your images nowhere. Without it, frame the image in an image editor on your device. <a href="/about/">About Frame</a> says more about how it works.</p>
 
       <div id="choose" hidden>
         <label for="files">Images <small>JPEG, PNG, WebP, or HEIC, one or many. You can also drop them anywhere on this page.</small></label><br>
@@ -54,8 +57,8 @@
           <h2 id="settings-title">Settings</h2>
           <label for="ratio">Aspect ratio</label><br>
           <select id="ratio" name="ratio" autocomplete="off">
-            <option value="original" data-name="framed">Original, as the photo is</option>
-            <option value="1:1" data-name="square" selected>1:1, square</option>
+            <option value="original" data-name="framed" selected>Original, as the image is</option>
+            <option value="1:1" data-name="square">1:1, square</option>
             <optgroup label="Landscape">
               <option value="3:2" data-name="photo">3:2, 35 mm photo</option>
               <option value="4:3" data-name="classic">4:3, classic screen</option>
@@ -67,29 +70,33 @@
               <option value="9:16" data-name="vertical">9:16, phone screen</option>
             </optgroup>
           </select><br>
-          <label for="preset">Style <small>A preset frame around the photo, or text on it.</small></label><br>
+          <label for="preset">Style <small>A preset frame around the image, or text on it.</small></label><br>
           <select id="preset" name="preset" autocomplete="off">
             <option value="none" selected>None</option>
-            <optgroup label="Even border">
-              <option value="border-white">White</option>
-              <option value="border-black">Black</option>
+            <optgroup label="Border">
+              <option value="border-white">White border</option>
+              <option value="border-black">Black border</option>
             </optgroup>
-            <optgroup label="Caption below">
-              <option value="caption-white">White</option>
-              <option value="caption-black">Black</option>
-              <option value="caption-centered">White, centered</option>
+            <optgroup label="Caption below the image">
+              <option value="caption-white">White caption</option>
+              <option value="caption-black">Black caption</option>
+              <option value="caption-centered">Centered caption</option>
+              <option value="palette">Caption with colors</option>
             </optgroup>
-            <optgroup label="Text on the photo">
-              <option value="overlay-white">White</option>
-              <option value="overlay-black">Black</option>
+            <optgroup label="On the image">
+              <option value="overlay-white">White text</option>
+              <option value="overlay-black">Black text</option>
+              <option value="date-stamp">Date stamp</option>
+              <option value="viewfinder">Viewfinder</option>
             </optgroup>
             <optgroup label="Analogue">
               <option value="film-edge">Film edge</option>
+              <option value="film-strip">Film strip</option>
               <option value="instant">Instant print</option>
             </optgroup>
           </select><br>
           <div id="caption-field" hidden>
-            <label for="caption-text">Caption <small>Leave it empty for the text of the style. Your own text can use {camera}, {lens}, {focal}, {aperture}, {shutter}, {iso}, and {date}.</small></label><br>
+            <label for="caption-text">Caption <small>Your own text in place of the main line of the style. It can use {camera}, {lens}, {focal}, {aperture}, {shutter}, {iso}, and {date}.</small></label><br>
             <input id="caption-text" name="caption" type="text" maxlength="120" autocomplete="off" spellcheck="false"><br>
           </div>
           <label for="border">Border <small>The narrowest gap between the image and the edge.</small></label>
@@ -104,8 +111,9 @@
               <option value="200"></option>
             </datalist>
           </p>
-          <fieldset>
+          <fieldset id="background">
             <legend>Background</legend>
+            <p id="background-note" hidden>With the original ratio and no border, the background does not show.</p>
             <label><input type="radio" name="background" value="color" checked> Solid color</label><br>
             <label><input type="radio" name="background" value="blur"> Blurred image</label><br>
             <div id="color-field">
