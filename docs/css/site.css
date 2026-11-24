@@ -1,0 +1,50 @@
+@layer layout {
+  /* When the preview would get less than half the width, the settings move below it. */
+  .editor {
+    --section-gap: var(--s-8);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    column-gap: var(--gutter);
+  }
+  .editor > section {
+    flex: 999 1 0;
+    min-inline-size: 50%;
+  }
+  .editor > form {
+    flex: 1 1 var(--margin-column);
+  }
+
+  .slider {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    max-inline-size: 40ch;
+    margin-block-end: 0;
+  }
+  .slider > input {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
+  .slider > output {
+    flex: none;
+    min-inline-size: 9ch;
+    font-variant-numeric: tabular-nums;
+  }
+  /* The stylesheet sets this gap after a field. A slider sits in a paragraph. */
+  .slider + fieldset {
+    margin-block-start: var(--s-4);
+  }
+  #status:not(:empty) {
+    margin-block-start: var(--s-4);
+  }
+}
+
+@layer components {
+  /* The line shows where a frame of the page's color ends. A tall frame stays in view. */
+  #canvas {
+    display: block;
+    max-block-size: 70vh;
+    border: var(--border-thin) solid var(--border);
+  }
+}

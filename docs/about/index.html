@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About Frame</title>
+    <meta name="description" content="What Frame does, how to use its settings, and what happens to your images: they stay in your browser.">
+    <meta property="og:title" content="About Frame">
+    <meta property="og:description" content="What Frame does, how to use its settings, and what happens to your images: they stay in your browser.">
+    <meta property="og:url" content="https://frame.spoons.fyi/about/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/css/brutalist.css">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/dark/sans/F.png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
+  </head>
+  <body>
+    <a href="#main">Skip to main content</a>
+    <header>
+      <a href="/">Frame</a>
+      <nav aria-label="Primary">
+        <a href="/about/" aria-current="page">About</a>
+      </nav>
+    </header>
+    <main id="main" class="reading">
+      <hgroup>
+        <h1>About</h1>
+        <p>A simple tool that runs in your browser.</p>
+      </hgroup>
+
+      <p>Frame was inspired by <a href="https://padsnap.app/">PadSnap</a> and tries to iterate on it with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> design system. My goal is to build software that brings a bit of joy to people. Frame preserves your image quality, up to 4096 pixels on the longer side, and your privacy.</p>
+      <p>There are no ads, no artificial limits, no dark patterns, and no monetization.</p>
+
+      <h2 id="usage">Usage</h2>
+      <p>Choose your images with the file field on the <a href="/">home page</a>, or drag them onto the page. Frame supports HEIC files from iPhones and converts them automatically. The preview shows the result at once, and every setting you change redraws it.</p>
+
+      <h3 id="aspect-ratio">Aspect Ratio</h3>
+      <p>The list is organized by orientation. If you're posting to Instagram, 1:1 or 4:5 works well. For presentations or YouTube, try 16:9. The classic photo formats, 3:2 and 2:3, match what most cameras shoot and what prints expect. Your image gets centered and scaled to fit whatever ratio you pick.</p>
+
+      <h3 id="border">Border</h3>
+      <aside><p><b>Note.</b> The border is measured in pixels of the saved image, so the same number looks thinner on a larger image.</p></aside>
+      <p>Borders can go from 0 to 200 pixels. 50 to 100 pixels give a lovely gallery feel without overwhelming the image. The slider moves in steps of 5, and with the keyboard, the arrow keys do the same.</p>
+
+      <h3 id="background">Background</h3>
+      <p>You have two options. A solid color is clean and classic: black for that museum wall look, white for prints, or your brand colors. The blurred image stretches your picture to fill the frame and blurs it, which works nicely when a border color would clash with your photo. Adjust the blur strength until it looks right to you.</p>
+
+      <h3 id="saving">Saving</h3>
+      <p>Every image is saved as a PNG file, named after the original and the aspect ratio. You can download the image on screen or copy it to the clipboard. With more than one image, the buttons above the preview step through them, and so do the <kbd>←</kbd> and <kbd>→</kbd> keys. One more button saves them all in a ZIP file, with the same settings.</p>
+
+      <h2 id="privacy">Privacy</h2>
+      <p>Your images never leave your device. Frame reads them, draws the border, and saves the result in your browser, and no server sees any of it. Once the page has loaded, it works offline. Only the converter for HEIC files loads later, with the first such file, and only in browsers that cannot read the format themselves.</p>
+      <p>Frame keeps your settings in the storage of your browser, so that they are still there on your next visit. It sets no cookies and has no trackers. The only request to another server is for the icon in the browser tab, which comes from <a href="https://favicons.spoons.fyi/">Favicons</a>.</p>
+
+      <h2 id="credits">Credits</h2>
+      <p>The blur is drawn with <a href="https://github.com/flozz/StackBlur">StackBlur</a>, and HEIC files are converted with <a href="https://github.com/alexcorvi/heic2any">heic2any</a>. Both are served from this site.</p>
+    </main>
+    <footer>
+      <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a> with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> stylesheet. No uploads, no cookies, no trackers.</p>
+    </footer>
+  </body>
+</html>

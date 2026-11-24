@@ -1,110 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Frame</title>
-  <meta name="description" content="Add borders and blur to images locally in your browser." />
-  <link rel="stylesheet" href="css/kauz.css">
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20144%20144%22%20width%3D%22144%22%20height%3D%22144%22%3E%0A%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%230A0A0A%22%2F%3E%0A%20%20%3Ctext%20x%3D%2250%25%22%20y%3D%2256%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22Helvetica%2C%20Arial%2C%20sans-serif%22%20font-size%3D%22132%22%20font-weight%3D%22bold%22%20fill%3D%22%23C85A3A%22%3EF%3C%2Ftext%3E%0A%3C%2Fsvg%3E">
-</head>
-
-<body>
-  <header>
-    <h1>Frame</h1>
-    <p>Add borders and blur to images.</p>
-    <nav>
-      <ul>
-        <li><a href="./">Home</a></li>
-        <li><a href="about">About</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <section id="drop-zone" role="button" tabindex="0" aria-label="File upload area">
-      <p id="drop-text">Drag & drop images or click to select</p>
-      <input type="file" id="file-input" accept="image/*,.heic,.HEIC" multiple hidden />
-    </section>
-
-    <form id="options-area" class="hidden">
-      <fieldset class="form-group">
-        <label for="aspect-ratio">Aspect Ratio</label>
-        <select id="aspect-ratio">
-          <!-- Populated by JavaScript -->
-        </select>
-      </fieldset>
-
-      <fieldset class="form-group">
-        <label for="border-slider">Border</label>
-        <div class="slider-row">
-          <input type="range" id="border-slider" />
-          <strong><span id="border-value"></span>px</strong>
-        </div>
-        <div class="preset-buttons">
-          <!-- Populated by JavaScript -->
-        </div>
-      </fieldset>
-
-      <fieldset class="form-group">
-        <label for="bg-type">Background</label>
-        <select id="bg-type">
-          <!-- Populated by JavaScript -->
-        </select>
-      </fieldset>
-
-      <fieldset class="form-group" id="color-control">
-        <label for="bg-color">Color</label>
-        <input type="color" id="bg-color" />
-      </fieldset>
-
-      <fieldset class="form-group hidden" id="blur-control">
-        <label for="blur-amount">Blur Amount</label>
-        <input type="number" id="blur-amount" />
-      </fieldset>
-    </form>
-
-    <section id="preview-area" class="hidden">
-      <nav class="nav-controls" aria-label="Image navigation">
-        <button id="prev-btn" disabled>Previous</button>
-        <span class="image-counter" role="status"><span id="current-num">1</span> of
-          <span id="total-num">1</span></span>
-        <button id="next-btn" disabled>Next</button>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Frame: add borders and blur to images</title>
+    <meta name="description" content="Add borders and blur to images locally in your browser.">
+    <meta property="og:title" content="Frame: add borders and blur to images">
+    <meta property="og:description" content="Add borders and blur to images locally in your browser.">
+    <meta property="og:url" content="https://frame.spoons.fyi/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/css/brutalist.css">
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/light/sans/F.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="https://favicons.spoons.fyi/icons/dark/sans/F.png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="https://favicons.spoons.fyi/icons/light/sans/F.png">
+    <script type="module" src="/js/app.js"></script>
+  </head>
+  <body>
+    <a href="#main">Skip to main content</a>
+    <header>
+      <a href="/">Frame</a>
+      <nav aria-label="Primary">
+        <a href="/about/">About</a>
       </nav>
+    </header>
+    <main id="main">
+      <h1>Add Borders and Blur to Images</h1>
+      <p id="no-script">Frame needs JavaScript, because it draws the border in your browser and sends your images nowhere. Without it, add the border in an image editor on your device. <a href="/about/">About Frame</a> says more about how it works.</p>
 
-      <figure>
-        <canvas id="preview-canvas" class="hidden"></canvas>
-        <figcaption class="image-caption" id="image-caption"></figcaption>
-      </figure>
+      <div id="choose" hidden>
+        <label for="files">Images <small>JPEG, PNG, WebP, or HEIC, one or many. You can also drop them anywhere on this page.</small></label><br>
+        <input id="files" type="file" accept="image/*,.heic,.heif" multiple><br>
+      </div>
+      <p role="status" id="status"></p>
 
-      <menu class="action-buttons">
-        <button id="download-btn">Download</button>
-        <button id="copy-btn">Copy</button>
-        <button id="download-all-btn" class="hidden">Download All</button>
-      </menu>
+      <div class="editor" id="editor" hidden>
+        <section aria-labelledby="preview-title">
+          <h2 id="preview-title">Preview</h2>
+          <p class="row" id="pager" hidden>
+            <button type="button" id="previous">Previous image</button>
+            <button type="button" id="next">Next image</button>
+            <span id="position" aria-live="polite"></span>
+          </p>
+          <figure>
+            <canvas id="canvas" role="img" aria-labelledby="caption"></canvas>
+            <figcaption id="caption"></figcaption>
+          </figure>
+        </section>
 
-      <aside class="keyboard-hints" role="note">
-        <kbd>Space</kbd> Download · <kbd>Esc</kbd> Clear ·
-        <kbd>←→</kbd> Navigate
-      </aside>
-    </section>
-  </main>
-
-  <footer>
-    <p>
-      Made with <span style="color: var(--color-accent)">♡</span> at
-      <a href="https://spoons.fyi/" target="_blank" rel="noopener">spoons.fyi</a>
-    </p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/stackblur-canvas@2.7.0/dist/stackblur.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/kauz.js" defer></script>
-  <script src="js/app.js"></script>
-</body>
-
+        <form id="settings" aria-labelledby="settings-title" novalidate>
+          <h2 id="settings-title">Settings</h2>
+          <label for="ratio">Aspect ratio</label><br>
+          <select id="ratio" name="ratio" autocomplete="off">
+            <option value="1:1" data-name="square" selected>1:1, square</option>
+            <optgroup label="Landscape">
+              <option value="3:2" data-name="photo">3:2, 35 mm photo</option>
+              <option value="4:3" data-name="classic">4:3, classic screen</option>
+              <option value="16:9" data-name="wide">16:9, widescreen</option>
+            </optgroup>
+            <optgroup label="Portrait">
+              <option value="4:5" data-name="portrait">4:5, Instagram portrait</option>
+              <option value="2:3" data-name="photo-portrait">2:3, 4 × 6 inch print</option>
+              <option value="9:16" data-name="vertical">9:16, phone screen</option>
+            </optgroup>
+          </select><br>
+          <label for="border">Border <small>The narrowest gap between the image and the edge.</small></label>
+          <p class="slider">
+            <input id="border" name="border" type="range" min="0" max="200" step="5" value="0" list="border-marks">
+            <output id="border-value" for="border">0 pixels</output>
+            <datalist id="border-marks">
+              <option value="0"></option>
+              <option value="50"></option>
+              <option value="100"></option>
+              <option value="150"></option>
+              <option value="200"></option>
+            </datalist>
+          </p>
+          <fieldset>
+            <legend>Background</legend>
+            <label><input type="radio" name="background" value="color" checked> Solid color</label><br>
+            <label><input type="radio" name="background" value="blur"> Blurred image</label><br>
+            <div id="color-field">
+              <label for="color">Color</label><br>
+              <input id="color" name="color" type="color" value="#000000"><br>
+            </div>
+            <div id="blur-field" hidden>
+              <label for="blur">Blur strength</label>
+              <p class="slider">
+                <input id="blur" name="blur" type="range" min="5" max="200" step="5" value="30">
+                <output id="blur-value" for="blur">30 pixels</output>
+              </p>
+            </div>
+          </fieldset>
+          <p class="row">
+            <button type="button" class="filled" id="download">Download the image (PNG)</button>
+            <button type="button" id="copy" hidden>Copy the image</button>
+            <button type="button" id="download-all" hidden>Download all images (ZIP)</button>
+            <button type="button" class="text" id="clear">Remove all images</button>
+          </p>
+          <p role="status" id="save-status"></p>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <p>Updated <time datetime="2026-11-24">24 November 2026</time>. Made at <a href="https://spoons.fyi/">spoons.fyi</a> with the <a href="https://brutalist.spoons.fyi/">Brutalist</a> stylesheet. No uploads, no cookies, no trackers.</p>
+    </footer>
+  </body>
 </html>
