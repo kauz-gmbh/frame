@@ -74,7 +74,8 @@ const layout = (image, style, { ratio, border }) => {
     height = Math.round(down * scale) + border * 2;
   } else {
     const [wide, tall] = ratio.split(':').map(Number);
-    const longest = Math.min(Math.max(across, down), MAX_SIDE);
+    // The margins of a style are parts of a pixel, and the frame is whole pixels.
+    const longest = Math.round(Math.min(Math.max(across, down), MAX_SIDE));
     width = wide >= tall ? longest : Math.round((longest * wide) / tall);
     height = wide >= tall ? Math.round((longest * tall) / wide) : longest;
     // A border wider than the frame leaves no room for the card.
